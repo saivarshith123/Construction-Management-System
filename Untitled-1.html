@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="icon" href="data:,"> <!-- Prevents the browser from fetching the favicon.ico file -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        #button-container {
+            margin: 20px;
+            text-align: center;
+        }
+        .button {
+            background-color: #007BFF;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 12px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        label, input[type="text"], input[type="submit"] {
+            width: 80%;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+        }
+        input[type="text"] {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type="submit"] {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div id="button-container"></div>
+    <h1>Insert Data</h1>
+    <form id="insert-form">
+        <label for="pid">Project ID:</label><br>
+        <input type="text" id="pid" name="pid"><br>
+        <input type="submit" value="Submit">
+    </form>
+    <script>
+        fetch('http://127.0.0.1:5000/projects')
+            .then(response => response.json()) // Parse the JSON response
+            .then(data => {
+                const buttonContainer = document.getElementById("button-container");
+                for (let i = 0; i < data.length; i++) {
+                    const project = data[i];
+                    const button = document.createElement("button");
+                    button.textContent = `Button ${i + 1}`;
+                    button.className = "button";
+                    button.addEventListener("click", function() {
+                        const redirectUrl = "file:///D:/data%20base/";
+                        window.location.href = redirectUrl;
+                        // Redirect from page A to page B with data
+                        window.location.href = 'bantu.html?pid=' + JSON.stringify(project[0]);
+                    });
+                    buttonContainer.appendChild(button);
+                }
+            })
+            .catch(error => {
+                alert(error); // Handle errors
+            });
+    </script>
+    <script>
+        document.getElementById("insert-form").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const pid = document.getElementById("pid").value;
+
+            fetch('http://127.0.0.1:5000/register2', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `pid=${pid}`
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("Project registered successfully.");
+                    // Optionally, you can reset the form after successful submission
+                    document.getElementById("insert-form").reset();
+                } else {
+                    alert("Error registering project.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("An error occurred while registering project.");
+            });
+        });
+    </script>
+</body>
+</html>

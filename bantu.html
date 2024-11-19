@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Division Registration Form</title>
+    <style>
+       /* General styling */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: url('image.png') no-repeat center center fixed;
+    background-size: cover;
+    color: #444;
+}
+
+/* Heading styling */
+h1 {
+    color: #2c3e50;
+    text-align: center;
+    font-size: 2.2em;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Form container styling */
+form {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 25px;
+    margin: 25px auto;
+    max-width: 520px;
+    border-radius: 12px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+/* Label styling */
+form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #34495e;
+}
+
+/* Input and button styling */
+form input[type="text"],
+form input[type="number"],
+form input[type="submit"],
+form button {
+    width: calc(100% - 24px);
+    padding: 12px;
+    margin: 10px 0 20px;
+    font-size: 1em;
+    border: 2px solid #bdc3c7;
+    border-radius: 6px;
+    box-sizing: border-box;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Focus effect for input fields */
+form input[type="text"]:focus,
+form input[type="number"]:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.5);
+}
+
+/* Submit button styling */
+form input[type="submit"],
+form button {
+    background: linear-gradient(to right, #4caf50, #66bb6a);
+    color: #fff;
+    cursor: pointer;
+    font-weight: 700;
+    border: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+}
+
+form input[type="submit"]:hover,
+form button:hover {
+    background: linear-gradient(to right, #45a049, #5da551);
+    transform: scale(1.05);
+}
+
+/* Delete button styling */
+#delete-btn {
+    display: block;
+    margin: 0 auto;
+    padding: 12px 24px;
+    background: linear-gradient(to right, #e74c3c, #ff6b6b);
+    color: #fff;
+    font-weight: 700;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+    transition: background 0.3s, transform 0.2s;
+}
+
+#delete-btn:hover {
+    background: linear-gradient(to right, #c0392b, #e55039);
+    transform: translateY(-2px);
+}
+
+/* Output container styling */
+#output {
+    background: rgba(255, 255, 255, 0.85);
+    padding: 25px;
+    margin: 25px auto;
+    max-width: 520px;
+    border-radius: 12px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+    color: #2c3e50;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Output list styling */
+#output ul {
+    list-style: none;
+    padding: 0;
+}
+
+#output ul li {
+    padding: 10px 0;
+    font-size: 1.1em;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+/* Division Data Display */
+#division-data {
+    background: rgba(255, 255, 255, 0.85);
+    padding: 25px;
+    margin: 25px auto;
+    max-width: 520px;
+    border-radius: 12px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+    color: #2c3e50;
+    animation: slideIn 0.6s ease-in-out;
+}
+
+#division-data h2 {
+    margin-top: 0;
+    font-size: 1.8em;
+    color: #16a085;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Responsive styling */
+@media (max-width: 600px) {
+    form {
+        padding: 15px;
+        max-width: 100%;
+    }
+
+    #output,
+    #division-data {
+        padding: 15px;
+        max-width: 100%;
+    }
+
+    h1 {
+        font-size: 1.8em;
+    }
+}
+    </style>
+</head>
+<body>
+    <h1>Division Registration Form</h1>
+    <form id="insert-form">
+        <label for="division_no">Division Number:</label>
+        <input type="text" id="division_no" name="division_no">
+        <label for="no_workers">Number of Workers:</label>
+        <input type="text" id="no_workers" name="no_workers">
+        <input type="submit" value="Submit">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    </form>
+
+    <div id="division-data"></div>
+
+    <form action="delete">
+        <label for="division_no">Division Number:</label>
+        <input type="text" id="division" name="division_no">
+    </form>
+    <button id="delete-btn">Delete Division</button>
+
+    <h1>Construction Materials Predictor</h1>
+    <form onsubmit="event.preventDefault(); predictConstructionMaterials();">
+        <label for="land_area">Land Area (sq. meters):</label>
+        <input type="number" id="land_area" name="land_area" required>
+
+        <label for="floors">Number of Floors:</label>
+        <input type="number" id="floors" name="floors" required>
+
+        <label for="rooms">Number of Rooms:</label>
+        <input type="number" id="rooms" name="rooms" required>
+
+        <label for="design">House Design:</label>
+        <input type="text" id="design" name="design" required>
+
+        <button type="submit">Predict Materials</button>
+    </form>
+
+    <div id="output"></div>
+
+    <script>
+        document.getElementById("insert-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const pid = urlParams.get('pid');
+
+            const division_no = document.getElementById("division_no").value;
+            const no_workers = document.getElementById("no_workers").value;
+
+            fetch('http://127.0.0.1:5000/register3', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `pid=${encodeURIComponent(pid)}&division_no=${encodeURIComponent(division_no)}&no_workers=${encodeURIComponent(no_workers)}`
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("Division registered successfully.");
+                    document.getElementById("insert-form").reset();
+                    fetchDivisionData(pid);
+                } else {
+                    alert("Error registering division.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("An error occurred while registering division.");
+            });
+        });
+
+        function fetchDivisionData(pid) {
+            fetch(`http://127.0.0.1:5000/${pid}`)
+            .then(response => response.json())
+            .then(data => {
+                const divisionDataElement = document.getElementById("division-data");
+                divisionDataElement.innerHTML = "<h2>Division Data</h2>";
+                data.division.forEach(division => {
+                    divisionDataElement.innerHTML += `<p>Division Number: ${division[1]}, Number of Workers: ${division[2]}</p>`;
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("An error occurred while fetching division data.");
+            });
+        }
+
+        function deleteDivision(pid, division_no) {
+            fetch('http://127.0.0.1:5000/delete_division', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `pid=${encodeURIComponent(pid)}&division_no=${encodeURIComponent(division_no)}`
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("Division deleted successfully.");
+                    fetchDivisionData(pid);
+                } else {
+                    alert("Error deleting division.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("An error occurred while deleting division.");
+            });
+        }
+
+        document.getElementById("delete-btn").addEventListener("click", function(event) {
+            event.preventDefault();
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const pid = urlParams.get('pid');
+
+            const division_no = document.getElementById("division").value;
+            deleteDivision(pid, division_no);
+        });
+
+        function predictConstructionMaterials() {
+            const land_area = document.getElementById('land_area').value;
+            const floors = document.getElementById('floors').value;
+            const rooms = document.getElementById('rooms').value;
+            const design = document.getElementById('design').value;
+
+            const url = `http://127.0.0.1:5000/${encodeURIComponent(land_area)}-${encodeURIComponent(floors)}-${encodeURIComponent(rooms)}-${encodeURIComponent(design)}`;
+
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(prediction => {
+                document.getElementById('output').innerHTML = `
+                    <p>Predicted Materials:</p>
+                    <ul>
+                        <li>Bricks: ${prediction[0]} units</li>
+                        <li>Cement: ${prediction[1]} bags</li>
+                        <li>Steel: ${prediction[2]} kg</li>
+                        <li>Wood: ${prediction[3]} cubic meters</li>
+                    </ul>
+                `;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('output').innerHTML = "An error occurred while fetching prediction.";
+            });
+        }
+    </script>
+</body>
+</html>
